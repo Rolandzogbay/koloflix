@@ -19,7 +19,7 @@
           alt="Backdrop"
           class="w-full h-full object-cover brightness-50"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-linear-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
         
         <div class="absolute bottom-0 left-0 p-6 md:p-10 w-full lg:w-3/4">
           <h1 class="text-4xl md:text-6xl font-extrabold mb-3 leading-tight">{{ movieDetails.title }}</h1>
@@ -37,7 +37,7 @@
           <div class="flex gap-4 items-center mt-6">
             <button
               @click="showTrailer = true"
-              class="px-6 py-3 bg-red-600 rounded-lg font-bold hover:bg-red-700 transition flex items-center gap-2"
+              class="px-6 py-3 bg-red-600 animate-pulse rounded-lg font-bold hover:bg-red-700 transition flex items-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
               Watch Trailer
@@ -101,7 +101,7 @@
             <img
               :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`"
               alt="Similar"
-              class="rounded-xl aspect-[2/3] object-cover shadow-lg"
+              class="rounded-xl aspect-2/3 object-cover shadow-lg"
             />
             <p class="text-sm font-semibold mt-2 line-clamp-2 text-white">{{ movie.title }}</p>
           </div>
@@ -115,7 +115,7 @@
             <img
               :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`"
               alt="Recommended"
-              class="rounded-xl aspect-[2/3] object-cover shadow-lg"
+              class="rounded-xl aspect-2/3 object-cover shadow-lg"
             />
             <p class="text-sm font-semibold mt-2 line-clamp-2 text-white">{{ movie.title }}</p>
           </div>

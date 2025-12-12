@@ -1,13 +1,13 @@
 <template>
-  <footer class="bg-gray-900 border-t border-gray-800 text-gray-300 mt-20">
+  <footer class="bg-(--color-bg) text-gray-400 mt-25">
     <div class="container mx-auto px-6 py-12">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
         <div>
           <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-            <span class="text-red-600 text-3xl">▶</span> MovieFinder
+            <span class="text-(--color-text) text-4xl">Kolo<span class="text-(--color-accent)">flix</span></span>
           </h2>
-          <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+          <p class="text-sm text-(--color-text) mb-6 leading-relaxed">
             Your ultimate destination for discovering the latest blockbusters, timeless classics, and trending TV shows.
           </p>
           <div class="flex space-x-4">
@@ -17,18 +17,18 @@
         </div>
 
         <div>
-          <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Discover</h3>
-          <ul class="space-y-2 text-sm">
+          <h3 class="text-(--color-text) font-semibold mb-4 uppercase tracking-wider text-xl">Discover</h3>
+          <ul class="space-y-2 text-base text-(--color-text)">
             <li><router-link to="/" class="hover:text-red-500 transition">Home</router-link></li>
-            <li><a href="#" class="hover:text-red-500 transition">Movies</a></li>
-            <li><a href="#" class="hover:text-red-500 transition">TV Shows</a></li>
-            <li><a href="#" class="hover:text-red-500 transition">New Arrivals</a></li>
+            <li><router-link to="/popular" class="hover:text-red-500 transition">Popular Movies</router-link></li>
+            <li><router-link to="/trending" class="hover:text-red-500 transition">Trending Movies</router-link></li>
+            <li><router-link to="/upcoming" class="hover:text-red-500 transition">Upcoming Movies</router-link></li>
           </ul>
         </div>
 
         <div>
-          <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Support</h3>
-          <ul class="space-y-2 text-sm">
+          <h3 class="text-(--color-text) font-semibold mb-4 uppercase tracking-wider text-xl">Support</h3>
+          <ul class="space-y-2 text-base text-(--color-text)">
             <li><a href="#" class="hover:text-red-500 transition">FAQ</a></li>
             <li><a href="#" class="hover:text-red-500 transition">Privacy Policy</a></li>
             <li><a href="#" class="hover:text-red-500 transition">Terms of Service</a></li>
@@ -37,8 +37,8 @@
         </div>
 
         <div>
-          <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Stay Updated</h3>
-          <p class="text-xs text-gray-500 mb-4">Subscribe to our newsletter for the latest updates.</p>
+          <h3 class="text-(--color-text) font-semibold mb-4 uppercase tracking-wider text-xl">Stay Updated</h3>
+          <p class="text-base text-(--color-text) mb-4">Subscribe to our newsletter for the latest updates.</p>
           <form class="flex flex-col gap-2">
             <input 
               type="email" 
@@ -52,9 +52,9 @@
         </div>
       </div>
 
-      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-        <p>&copy; {{ new Date().getFullYear() }} MovieFinder App. All rights reserved.</p>
-        <p>Designed with Vue & Tailwind</p>
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-base text-(--color-text)">
+        <p>&copy; {{ new Date().getFullYear() }} Koloflix Your Ultimate Choice. All rights reserved.</p>
+        <p>Designed with Vue & Tailwind - <i>Roland Zogbay</i></p>
       </div>
     </div>
   </footer>
