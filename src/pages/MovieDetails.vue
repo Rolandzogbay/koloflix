@@ -23,6 +23,7 @@
         
         <div class="absolute bottom-0 left-0 p-6 md:p-10 w-full lg:w-3/4">
           <h1 class="text-4xl md:text-6xl font-extrabold mb-3 leading-tight">{{ movieDetails.title }}</h1>
+          <p class=" text-gray-200 mb-4 leading-tight">{{ movieDetails.overview }}</p>
           
           <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-300 mb-4">
             <span class="text-yellow-400 font-semibold flex items-center gap-1">

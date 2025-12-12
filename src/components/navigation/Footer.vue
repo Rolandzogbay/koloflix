@@ -1,6 +1,6 @@
 <template>
-  <footer class="bg-(--color-bg) text-gray-400 mt-25">
-    <div class="container mx-auto px-6 py-12">
+  <footer class="bg-(--color-bg) text-gray-400 mt-22">
+    <div class="container mx-auto px-6 py-12 border-t border-gray-800">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
         <div>
@@ -53,7 +53,7 @@
       </div>
 
       <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-base text-(--color-text)">
-        <p>&copy; {{ new Date().getFullYear() }} Koloflix Your Ultimate Choice. All rights reserved.</p>
+        <p>&copy; {{ new Date().getFullYear() }} Koloflix Your Ultimate Choice. All rights reserved. <br>Power by: Orange Digital Center</p>
         <p>Designed with Vue & Tailwind - <i>Roland Zogbay</i></p>
       </div>
     </div>

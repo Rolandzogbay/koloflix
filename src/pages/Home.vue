@@ -3,7 +3,7 @@
     <div>
       <div
         v-if="featuredMovie"
-        class="relative w-full h-[550px] md:h-[650px] mb-12"
+        class="relative w-full h-[550px] md:h-[650px] mb-12 rounded-2xl"
       >
         <div class="absolute inset-0">
           <img
@@ -32,7 +32,7 @@
             </span>
           </div>
 
-          <p class="hidden md:block text-lg text-gray-300 line-clamp-3 mb-8 max-w-2xl">
+          <p class="md:block text-lg text-gray-300 line-clamp-3 mb-8 max-w-2xl">
             {{ featuredMovie.overview }}
           </p>
 
@@ -52,13 +52,17 @@
 
       <div class="container mx-auto px-4 md:px-8">
         <div class="flex justify-between items-end mb-8">
-          <h2 class="text-3xl font-bold border-l-4 border-red-600 pl-4 text-(--color-text)">
-            Trending Now
+          <h2 class="text-3xl font-bold border-l-4 border-red-600 pl-2 text-(--color-text)">
+            Trending Now (Page {{ currentPage }})
           </h2>
           <router-link to="/trending" class="text-red-500 hover:text-red-400 text-sm font-semibold">View All &rarr;</router-link>
         </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+        
+        <div v-if="loading && movies.length === 0" class="text-center py-10">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-red-600 mx-auto mb-4"></div>
+            <p class="text-gray-400">Loading movies...</p>
+        </div>
+        <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
           <div
             v-for="movie in movies"
             :key="movie.id"
@@ -94,6 +98,27 @@
             </div>
           </div>
         </div>
+        <div v-if="!loading && movies.length > 0" class="flex justify-center items-center space-x-4 mt-12">
+            <button
+                @click="changePage(currentPage - 1)"
+                :disabled="currentPage <= 1"
+                class="px-4 py-2 bg-gray-700 rounded-lg text-white font-semibold hover:bg-gray-600 transition disabled:opacity-30"
+            >
+                &larr; Previous
+            </button>
+            
+            <span class="text-lg font-semibold text-white">
+                Page {{ currentPage }}
+            </span>
+            
+            <button
+                @click="changePage(currentPage + 1)"
+                class="px-4 py-2 bg-red-600 rounded-lg text-white font-semibold hover:bg-red-700 transition"
+            >
+                Next &rarr;
+            </button>
+        </div>
+
       </div>
     </div>
     <Footer />
@@ -101,14 +126,36 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useMovies } from "@/composables/movies.data";
 import Footer from "@/components/navigation/Footer.vue";
 
-const { movies, fetchMovies, loading, error } = useMovies();
-fetchMovies();
+// 1. Pagination State
+const currentPage = ref(1);
 
-// Use the FIRST movie as featured
+// 2. Integration with Composable
+// NOTE: Assuming useMovies now returns movies and accepts a page number.
+const { movies, fetchMovies, loading, error } = useMovies();
+
+// 3. Pagination Logic
+const changePage = (newPage) => {
+    // Prevent going below page 1
+    if (newPage < 1) return;
+    
+    // Update the state and scroll to top of movie grid
+    currentPage.value = newPage;
+    
+    // Fetch new data for the selected page
+    fetchMovies(newPage);
+
+    // Optional: Scroll to the top of the content area
+    window.scrollTo({ top: 600, behavior: 'smooth' }); 
+};
+
+// Initial Fetch
+changePage(currentPage.value); 
+
+// Use the FIRST movie of the CURRENT page as featured
 const featuredMovie = computed(() => movies.value && movies.value.length > 0 ? movies.value[0] : null);
 </script>
 
