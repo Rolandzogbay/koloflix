@@ -15,10 +15,10 @@
       </button>
 
       <!-- Logo -->
-      <div class="flex items-center space-x-2 cursor-pointer">
+      <router-link to="/" class="flex items-center space-x-2 cursor-pointer">
         <img src="../../assets/icons/logo.png" class="h-14 w-14" alt="KoloFlix" />
         <h1 class="text-3xl font-bold text-(--color-text)">KoloFlix</h1>
-      </div>
+      </router-link>
     </div>
 
     <!-- Center Section: Search Bar -->
