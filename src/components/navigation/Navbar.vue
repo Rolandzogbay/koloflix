@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-100 h-16 flex items-center justify-between px-4 shadow-md
+    class="fixed top-0 left-0 right-0 z-100 p-3 flex items-center justify-between px-4 shadow-md
            bg-(--color-bg) text-(--color-text) border-b-(--color-text) border-b transition-colors">
 
     <!-- Left Section -->
@@ -16,8 +16,8 @@
 
       <!-- Logo -->
       <router-link to="/" class="flex items-center space-x-2 cursor-pointer">
-        <img src="../../assets/icons/logo.png" class="h-14 w-14" alt="KoloFlix" />
-        <h1 class="text-3xl font-bold text-(--color-text)">KoloFlix</h1>
+        <img v-if="darkMode" src="../../assets/icons/logo.png" class="h-14 w-25" alt="KoloFlix" />
+        <img v-else src="../../assets/icons/pngLogo.png" class="h-14 w-25" alt="KoloFlix" />
       </router-link>
     </div>
 

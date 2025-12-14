@@ -15,16 +15,16 @@
       'lg:translate-x-0 lg:static'
     ]"
   >
-    <!-- Header -->
-    <div class="flex items-center justify-between px-4 py-4 border-b border-(--color-hover)">
-      <h2 class="font-bold text-lg">Menu</h2>
+    <!-- Sidebar headers && Close button -->
+    <div v-if="isOpen"  class="flex items-center justify-between px-4 py-4 border-b border-(--color-hover) mt-18">
+      <h2 class="font-bold text-3xl">Kolo<span class="text-(--color-accent)">flix</span></h2>
       <button @click="closeSidebar" class="lg:hidden">
         <i class="fa-solid fa-xmark text-(--color-text) text-2xl"></i>
       </button>
     </div>
 
-    <!-- Navigation Links -->
-    <nav class="mt-6">
+    <!-- Sidebar Links -->
+    <nav class="mt-2 md:mt-23">
       <router-link
         v-for="item in menu"
         :key="item.name"
@@ -53,17 +53,16 @@ const route = useRoute();
 
 const closeSidebar = () => emit('close');
 
-// Navigation links
 const menu = [
   { name: "Home", to: "/", icon: "fa-solid fa-house" },
   { name: "Popular Movies", to: "/popular", icon: "fa-solid fa-fire" },
   { name: "Top Rated Movies", to: "/top-rated", icon: "fa-solid fa-star" },
   { name: "Upcoming Series", to: "/upcoming", icon: "fa-solid fa-calendar" },
   { name: "Trending Movies", to: "/trending", icon: "fa-solid fa-arrow-trend-up" },
-  { name: "Search", to: "/search", icon: "fa-solid fa-magnifying-glass" },
+  { name: "Comedy Series", to: "/comedy", icon: "fas fa-theater-masks"},
+  { name: "Action Movies", to: "/action", icon: "fa-solid fa-film"},
 ];
 
-// Highlight active link
 const isActive = (path) => route.path === path;
 </script>
 

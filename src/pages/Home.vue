@@ -1,18 +1,18 @@
 <template>
   <div class="min-h-screen text-gray-100 pb-10">
     <div>
+      
       <div
         v-if="featuredMovie"
-        class="relative w-full h-[550px] md:h-[650px] mb-12 rounded-2xl"
+        class="relative w-full h-[550px] md:h-[700px] mb-12 rounded-2xl"
       >
         <div class="absolute inset-0">
           <img
             :src="`https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`"
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover brightness-80"
             alt="Featured Movie"
+            loading="eager"
           />
-          <div class="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
-          <div class="absolute inset-0 bg-linear-to-r from-gray-900 via-gray-900/40 to-transparent"></div>
         </div>
 
         <div class="absolute bottom-0 left-0 w-full p-8 md:p-16 lg:w-2/3">
@@ -32,10 +32,23 @@
             </span>
           </div>
 
-          <p class="md:block text-lg text-gray-300 line-clamp-3 mb-8 max-w-2xl">
+          <p 
+            class="md:block text-lg text-gray-300 mb-4 max-w-2xl transition-all duration-300"
+            :class="{ 'line-clamp-3': !isOverviewExpanded }"
+          >
             {{ featuredMovie.overview }}
           </p>
+          <div>
 
+            <button 
+              v-if="featuredMovie.overview && featuredMovie.overview.length > 200"
+              @click="toggleOverview" 
+              class=" text-white hover:text-red-500 font-semibold mb-8 transition text-base"
+            >
+              {{ isOverviewExpanded ? 'See Less' : 'Read More' }} <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+          
           <div class="flex gap-4">
             <router-link
               :to="`/movie/${featuredMovie.id}`"
@@ -49,116 +62,113 @@
           </div>
         </div>
       </div>
-
-      <div class="container mx-auto px-4 md:px-8">
-        <div class="flex justify-between items-end mb-8">
-          <h2 class="text-3xl font-bold border-l-4 border-red-600 pl-2 text-(--color-text)">
-            Trending Now (Page {{ currentPage }})
-          </h2>
-          <router-link to="/trending" class="text-red-500 hover:text-red-400 text-sm font-semibold">View All &rarr;</router-link>
-        </div>
+      
+      <div class="container mx-auto px-4 md:px-8 space-y-12">
         
-        <div v-if="loading && movies.length === 0" class="text-center py-10">
-            <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-red-600 mx-auto mb-4"></div>
-            <p class="text-gray-400">Loading movies...</p>
+        <div v-if="loading" class="text-center py-20">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-red-600 mx-auto mb-4"></div>
+          <p class="text-gray-400 text-lg">Loading movie categories...</p>
         </div>
-        <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-          <div
-            v-for="movie in movies"
-            :key="movie.id"
-            class="group bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-red-900/20 hover:shadow-2xl transition duration-300 transform hover:-translate-y-2"
-          >
-            <div class="relative aspect-2/3 overflow-hidden">
-              <img
-                :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
-                class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
-                loading="lazy"
-                alt="Poster"
-              />
-              <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
-                 <router-link
-                  :to="`/movie/${movie.id}`"
-                  class="px-6 py-2 bg-red-600 text-white rounded-full font-bold transform scale-90 group-hover:scale-100 transition"
-                >
-                  View Details
-                </router-link>
-              </div>
-            </div>
 
-            <div class="p-4">
-              <h3 class="text-lg font-bold truncate text-white mb-1" :title="movie.title">
-                {{ movie.title }}
-              </h3>
-              <div class="flex justify-between items-center text-sm text-gray-400">
-                <span>{{ movie.release_date?.split('-')[0] }}</span>
-                <span class="flex items-center text-yellow-500 gap-1">
-                  ★ {{ movie.vote_average.toFixed(1) }}
-                </span>
-              </div>
+        <template v-else>
+          
+          <div class="pt-8">
+            <div class="flex justify-between items-end mb-4">
+               <h2 class="text-2xl text-(--color-text) md:text-3xl font-bold border-l-4 border-red-600 pl-3">
+                  Trending Now
+               </h2>
+                <router-link to="/trending" class="text-(--color-text) hover:text-red-400 text-sm font-semibold">View All &rarr;</router-link>
             </div>
+            
+            <Slider :items="trendingMovies">
+                 <template v-slot="{ item }">
+                    <router-link :to="`/movie/${item.id}`" class="relative w-full h-full group">
+                       <img
+                          :src="`https://image.tmdb.org/t/p/original${item.poster_path}`"
+                          alt="Poster"
+                          class="w-full h-full object-cover object-center rounded-xl"
+                        />
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6 rounded-xl">
+                            <h3 class="text-xl font-bold text-(--color-text) line-clamp-2 mb-1">{{ item.title }}</h3>
+                            <div class="flex justify-between items-center text-sm text-gray-300">
+                                <span>{{ item.release_date?.split('-')[0] }}</span>
+                                <span class="text-yellow-400 flex items-center gap-1">★ {{ item.vote_average.toFixed(1) }}</span>
+                            </div>
+                        </div>
+                    </router-link>
+                </template>
+            </Slider>
           </div>
-        </div>
-        <div v-if="!loading && movies.length > 0" class="flex justify-center items-center space-x-4 mt-12">
-            <button
-                @click="changePage(currentPage - 1)"
-                :disabled="currentPage <= 1"
-                class="px-4 py-2 bg-gray-700 rounded-lg text-white font-semibold hover:bg-gray-600 transition disabled:opacity-30"
-            >
-                &larr; Previous
-            </button>
-            
-            <span class="text-lg font-semibold text-white">
-                Page {{ currentPage }}
-            </span>
-            
-            <button
-                @click="changePage(currentPage + 1)"
-                class="px-4 py-2 bg-red-600 rounded-lg text-white font-semibold hover:bg-red-700 transition"
-            >
-                Next &rarr;
-            </button>
-        </div>
-
+          
+          <MovieCarousel 
+            title="Top Rated" 
+            :movies="topRatedMoviesHome" 
+            to="/top-rated" 
+            border-color="yellow" 
+          />
+          
+          <MovieCarousel 
+            title="Action Hits" 
+            :movies="actionMovies" 
+            to="/action" 
+            border-color="blue" 
+          />
+          
+          <MovieCarousel 
+            title="Comedy Specials" 
+            :movies="comedyMovies" 
+            to="/comedy" 
+            border-color="green" 
+          />
+        </template>
+        
       </div>
+      
     </div>
     <Footer />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useMovies } from "@/composables/movies.data";
 import Footer from "@/components/navigation/Footer.vue";
+import MovieCarousel from "@/components/ui/MoveCarousal.vue";
+import Slider from "@/components/ui/Slider.vue";
+import SearchBar from "@/components/ui/SearchBar.vue";
 
-// 1. Pagination State
-const currentPage = ref(1);
+const { 
+  trendingMovies,
+  topRatedMoviesHome,
+  actionMovies,
+  comedyMovies,
+  fetchAllHomeCarousels,
+  loading
+} = useMovies();
 
-// 2. Integration with Composable
-// NOTE: Assuming useMovies now returns movies and accepts a page number.
-const { movies, fetchMovies, loading, error } = useMovies();
+const isOverviewExpanded = ref(false); 
 
-// 3. Pagination Logic
-const changePage = (newPage) => {
-    // Prevent going below page 1
-    if (newPage < 1) return;
-    
-    // Update the state and scroll to top of movie grid
-    currentPage.value = newPage;
-    
-    // Fetch new data for the selected page
-    fetchMovies(newPage);
-
-    // Optional: Scroll to the top of the content area
-    window.scrollTo({ top: 600, behavior: 'smooth' }); 
+const toggleOverview = () => {
+    isOverviewExpanded.value = !isOverviewExpanded.value;
 };
+onMounted(() => {
+  fetchAllHomeCarousels();
+});
 
-// Initial Fetch
-changePage(currentPage.value); 
-
-// Use the FIRST movie of the CURRENT page as featured
-const featuredMovie = computed(() => movies.value && movies.value.length > 0 ? movies.value[0] : null);
+const featuredMovie = computed(() => trendingMovies.value && trendingMovies.value.length > 0 ? trendingMovies.value[0] : null);
 </script>
-
 <style scoped>
-/* Scoped styles kept minimal, relying on Tailwind */
+.bg-linear-to-t {
+    background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+.bg-linear-to-r {
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
 </style>

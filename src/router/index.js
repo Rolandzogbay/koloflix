@@ -6,6 +6,8 @@ import Popular from '@/pages/Popular.vue'
 import TopRated from '@/pages/TopRated.vue'
 import Trending from '@/pages/Trending.vue'
 import Upcoming from '@/pages/Upcoming.vue'
+import Comedy from '@/pages/Comedy.vue'
+import ActionMovies from '@/pages/ActionMovies.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -15,6 +17,8 @@ const routes = [
   { path: '/top-rated', name: 'TopRated', component: TopRated },
   { path: '/trending', name: 'Trending', component: Trending },
   { path: '/upcoming', name: 'Upcoming', component: Upcoming },
+  { path: '/action', name: 'Action', component: ActionMovies },
+  { path: '/comedy', name: 'Comedy', component: Comedy },
 ]
 
 const router = createRouter({

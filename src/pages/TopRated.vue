@@ -3,8 +3,8 @@
     <div class="container mx-auto px-4 md:px-8 pt-10">
       
       <div class="flex justify-between items-end mb-8">
-        <h1 class="text-2xl md:text-4xl text-(--color-text) font-extrabold border-l-4 border-red-600 pl-3">
-          Top Rated Movies (Page {{ currentPage }})
+        <h1 class="text-2xl md:text-4xl text-(--color-text) font-semibold border-l-4 border-red-600 pl-3">
+          Top Rated Movies
         </h1>
       </div>
 
@@ -13,9 +13,9 @@
         <p class="text-gray-400 text-lg">Loading top rated titles...</p>
       </div>
 
-      <div v-else-if="error" class="text-center py-20 text-red-500">
-        <h2 class="text-2xl font-bold">Error Loading Movies</h2>
-        <p class="text-gray-400">{{ error }}</p>
+      <div v-else-if="error || topRatedMovies.length === 0" class="text-center py-20 ">
+        <h2 class="text-2xl font-bold text-(--color-accent)">😢Error Loading Movies. Please check your internet and try again</h2>
+        <p class="text-gray-400">{{ error}}</p>
       </div>
 
       <div v-else-if="topRatedMovies.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
@@ -75,7 +75,9 @@
               Next &rarr;
           </button>
       </div>
-
+      <div v-else-if="!loading" class="text-center py-20 text-gray-500">
+          <p>No top rated movies available right now.</p>
+        </div>
     </div>
     <Footer />
   </div>
