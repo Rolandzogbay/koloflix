@@ -68,6 +68,7 @@ onMounted(() => {
 
 function toggleTheme() {
   darkMode.value = !darkMode.value;
+
   if (darkMode.value) {
     document.documentElement.classList.add('dark');
     localStorage.theme = 'dark';

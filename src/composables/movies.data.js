@@ -24,8 +24,7 @@ const movieDetails = ref(null)
 const loading = ref(false)
 const error = ref(null)
 
-// --- CONFIGURATION ---
-// IMPORTANT: Ensure VITE_APP_API_KEY is correctly set in your .env file
+// --- Api and BaseUrl Configuration ---
 const apikey = import.meta.env.VITE_APP_API_KEY
 const baseUrl = 'https://api.themoviedb.org/3'
 
@@ -44,7 +43,6 @@ const fetchCombinedMovies = async (
   error.value = null
 
   // Calculate the two TMDb pages needed for the current application page
-  // App Page 1 = TMDb Pages 1 and 2
   const tmdbPage1 = page * 2 - 1
   const tmdbPage2 = page * 2
 
@@ -64,7 +62,7 @@ const fetchCombinedMovies = async (
     // Combine page 1 (all 20) with the first 4 from page 2 to get 24
     const combinedResults = [...data1.results, ...data2.results.slice(0, 4)]
 
-    // Calculate the total pages for the user (TMDb total / 2, rounded up)
+    // Calculate the total pages for the user
     totalPagesRef.value = Math.ceil(data1.total_pages / 2)
 
     movieStateRef.value = combinedResults
@@ -86,7 +84,7 @@ export function useMovies() {
       'trending/movie/week',
       page,
       trendingFullList,
-      popularTotalPages, // Using popular pagination refs
+      popularTotalPages,
       popularPage,
     )
   }
@@ -96,13 +94,18 @@ export function useMovies() {
       'movie/top_rated',
       page,
       topRatedMovies,
-      popularTotalPages, // Using popular pagination refs
+      popularTotalPages, 
       popularPage,
     )
   }
 
   const fetchPopularMovies = async (page = 1) => {
-    await fetchCombinedMovies('movie/popular', page, popularMovies, popularTotalPages, popularPage)
+    await fetchCombinedMovies(
+      'movie/popular', 
+      page, 
+      popularMovies, 
+      popularTotalPages, 
+      popularPage)
   }
 
   const fetchUpcomingMovies = async (page = 1) => {
@@ -115,9 +118,7 @@ export function useMovies() {
     )
   }
 
-  // --- HOME PAGE CAROUSEL FETCH FUNCTIONS (15 results, no pagination) ---
-
-  // Fetch Movies by Genre (Used for Action/Comedy carousels)
+  // Fetch Movies by Genre
   const fetchGenreMovies = async (genreId, stateRef) => {
     try {
       const response = await fetch(
@@ -165,8 +166,7 @@ export function useMovies() {
     }
   }
 
-  // --- OTHER FETCH FUNCTIONS ---
-
+  // MovieDetails Fetch function
   const fetchMoviesDetails = async (id) => {
     loading.value = true
     error.value = null
@@ -180,12 +180,13 @@ export function useMovies() {
     }
   }
 
+  // MovieVideos Fetch function
   const fetchMovieVideos = async (id) => {
     try {
       const res = await fetch(`${baseUrl}/movie/${id}/videos?api_key=${apikey}`)
       const data = await res.json()
 
-      const trailer = data.results.find((v) => v.type === 'Trailer' && v.site === 'YouTube')
+      const trailer = data.results.find((v) => v.type === 'Trailer' && v.site === 'Youtube')
 
       return trailer ? trailer.key : null
     } catch (err) {
@@ -203,9 +204,8 @@ export function useMovies() {
       const res = await fetch(
         `${baseUrl}/search/movie?api_key=${apikey}&query=${encodeURIComponent(query)}`,
       )
-
       const data = await res.json()
-      trendingFullList.value = data.results // Using the full list state for search results
+      trendingFullList.value = data.results 
     } catch (err) {
       err.value = 'Failed to fetch movies'
     } finally {
@@ -215,23 +215,17 @@ export function useMovies() {
   // This function uses the same endpoint as searchMovies but is designed for lightweight, debounced calls
   const fetchSearchSuggestions = async (query) => {
     if (!query) return
-
     try {
       const res = await fetch(
         `${baseUrl}/search/movie?api_key=${apikey}&query=${encodeURIComponent(query)}&page=1`,
       )
-
       const data = await res.json()
       // Use the trendingFullList state to temporarily store the results for SearchBar consumption
       trendingFullList.value = data.results
     } catch (err) {
       console.error('Failed to fetch search suggestions:', err)
     }
-    // IMPORTANT: Note that this function does *not* touch the global 'loading' ref,
-    // ensuring the main page loading state is unaffected.
   }
-
-  // --- EXPOSED INTERFACE ---
   return {
     // Home Carousels (Limited)
     trendingMovies,
